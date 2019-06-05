@@ -60,7 +60,7 @@ $userdata = $getdata->my_sql_query(NULL,"user","user_key='".$_SESSION['ukey']."'
                                </div>
                                <?php
                               // @$getcode = $getdata->getMaxID_N("po","stock_tb_receive_master","PO");
-                                @$getcode = $getdata->genreserv("PO","stock_tb_receive_master","po",date("dmY"));
+                                @$getcode = $getdata->genreserv("PO","stock_tb_receive_master","PO",date("dmY"));
                                ?>
                              <div class="col-xs-3">
                                             <label for="po">เลขที่ใบรับสินค้า :</label>

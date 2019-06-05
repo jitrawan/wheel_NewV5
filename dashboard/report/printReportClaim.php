@@ -82,10 +82,11 @@ if($_GET['status'] != ""){
 $head .= '<table>';
 
 $head .= '<tr style="font-weight:bold; color:#FFF; background:#777777;">
-										<td colspan="7">&nbsp;&nbsp;<b>เคลมสินค้า</b></td>
+										<td colspan="8">&nbsp;&nbsp;<b>เคลมสินค้า</b></td>
 								</tr>
 
            <tr>
+					 	<th width="5%">ลำดับ</th>
                 <th width="12%">รหัสสินค้า</th>
 								<th width="10%">สินค้า </th>
 								<th width="10%">ชนิดสินค้า </th>
@@ -135,6 +136,7 @@ while($row = mysql_fetch_object($getGroup)){
 				left join productdetailrubber r on p.ProductID = r.ProductID "
 				," c.card_key = '".$row->card_key."'  $str_hand $str_type Order by c.item_insert ");
 				if(mysql_num_rows($getDetail) > 0){
+					$y = 0;
 						while($rowD = mysql_fetch_object($getDetail)){
 
 							$showDetailProduct = $getdata->my_sql_query(" p.*, r.*, w.* ,r.code as rcode , w.code as wcode ,w.diameter as diameterWheel,r.diameter as diameterRubber,p.ProductID as ProductID,r.diameter as rubdiameter ,w.diameter as whediameter
@@ -153,7 +155,7 @@ while($row = mysql_fetch_object($getGroup)){
 							," product_N p
 							left join productDetailWheel w on p.ProductID = w.ProductID
 							left join productdetailrubber r on p.ProductID = r.ProductID "
-							," (r.code = '".$rowD->reseve_item_key."' or w.code = '".$row->ProductID."') ");
+							," (r.code = '".$rowD->reseve_item_key."' or w.code = '".$rowD->reseve_item_key."') ");
 
 
 							$settype = "";
@@ -171,6 +173,7 @@ while($row = mysql_fetch_object($getGroup)){
 
 
 							$content .='<tr>
+							<td align="center"><strong>'.$y.'</strong></td>
 								<td align="center"><strong>'.@$rowD->reseve_item_key.'</strong></td>
 								<td align="center"><strong>'.@$settype.'</strong></td>
 								<td align="center"><strong>มือ '.@$showDetailProduct->hand.'</strong></td>
@@ -179,6 +182,7 @@ while($row = mysql_fetch_object($getGroup)){
 								<td valign="middle" style=" text-align: center;"><strong>'.@$rowD->item_amt.'&nbsp;ชิ้น</strong></td>
 								<td valign="middle" ><strong>'.dateConvertor(@$rowD->item_insert).'</strong></td>
 							</tr>';
+							$y ++;
 						}
 
 				}
@@ -186,7 +190,7 @@ while($row = mysql_fetch_object($getGroup)){
 }
 
     $content .='<tr style="font-weight:bold; color:#FFF; background:#A9A9A9;">
-    <th colspan="7" style=" height: 15px;"></th>
+    <th colspan="8" style=" height: 15px;"></th>
     </tr>
 		</table>
     <br>';
@@ -195,9 +199,10 @@ while($row = mysql_fetch_object($getGroup)){
     $head2 = '<table>';
 
     $head2 .= '<tr style="font-weight:bold; color:#FFF; background:#777777;">
-                <td colspan="7">&nbsp;&nbsp;<b>เปลี่ยนสินค้า</b></td>
+                <td colspan="8">&nbsp;&nbsp;<b>เปลี่ยนสินค้า</b></td>
             </tr>
             <tr>
+						<th width="5%">ลำดับ</th>
 			        <th width="12%">รหัสสินค้า</th>
 							<th width="10%">สินค้า </th>
 							<th width="10%">ชนิดสินค้า </th>
@@ -207,13 +212,7 @@ while($row = mysql_fetch_object($getGroup)){
               <th width="10%">วันที่เปลี่ยน</th>
 			    </tr>
       </thead>';
-      $getchangeData  = $getdata->my_sql_select("reserve_key","changeproduct"," reserve_key != '' and createDate BETWEEN '".htmlentities($_GET['datefrom'])."' and '".htmlentities($_GET['dateto'])."' group by reserve_key ");
-      while($rowchange = mysql_fetch_object($getchangeData)){
-      $getreserve_key = $getdata->my_sql_query(Null,"reserve_info"," reserve_key = '".$rowchange->reserve_key."' ");
 
-$content2 .= '<tr style="font-weight:bold; color:#FFF; background:#A9A9A9;">
-<td colspan="7">&nbsp;&nbsp;<b>เลขที่ใบเสร็จ : '.$getreserve_key->reserve_no.'</b></td>
-</tr>';
 
 $getDetailC = $getdata->my_sql_select("c.*,p.*, r.*, w.* ,w.diameter as diameterWheel,r.diameter as diameterRubber,p.ProductID as ProductID,r.diameter as rubdiameter ,w.diameter as whediameter
 ,case
@@ -231,9 +230,10 @@ $getDetailC = $getdata->my_sql_select("c.*,p.*, r.*, w.* ,w.diameter as diameter
 	,"changeproduct c
 	left join product_N p on p.ProductID = c.ProductID
 	left join productDetailWheel w on p.ProductID = w.ProductID
-	left join productDetailRubber r on p.ProductID = r.ProductID "
-	," c.reserve_key = '".$rowchange->reserve_key."'  ");
+	left join productDetailRubber r on p.ProductID = r.ProductID"
+	," reserve_key != '' and createDate BETWEEN '".htmlentities($_GET['datefrom'])."' and '".htmlentities($_GET['dateto'])."'  ");
 if(mysql_num_rows($getDetailC) > 0){
+$x = 1;
 		while($rowC = mysql_fetch_object($getDetailC)){
 
 			$settype = "";
@@ -247,6 +247,8 @@ if(mysql_num_rows($getDetailC) > 0){
 				$gettype = "";
 			}
 			$content2 .='<tr>
+
+			<td align="center"><strong>'.@$x.'</strong></td>
 				<td align="center"><strong>'.@$rowC->code.'</strong></td>
 				<td align="center"><strong>'.@$settype.'</strong></td>
 				<td align="center"><strong>มือ '.@$rowC->hand.'</strong></td>
@@ -255,16 +257,17 @@ if(mysql_num_rows($getDetailC) > 0){
 				<td valign="middle" style=" text-align: center;"><strong>'.@$rowC->change_Amt.'&nbsp;ชิ้น</strong></td>
 				<td valign="middle" ><strong>'.dateConvertor(@$rowC->createDate).'</strong></td>
 			</tr>';
+
+			$x ++;
 		}
 
 }
+$content2 .='<tr style="font-weight:bold; color:#FFF; background:#A9A9A9;">
+<th colspan="8" style=" height: 15px;"></th>
+</tr>
+</table>';
 
-      }
 
-			$content2 .='<tr style="font-weight:bold; color:#FFF; background:#A9A9A9;">
-	    <th colspan="7" style=" height: 15px;"></th>
-	    </tr>
-			</table>';
 
 $end = '
 <div class="footer">

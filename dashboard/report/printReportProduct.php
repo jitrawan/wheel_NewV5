@@ -191,7 +191,7 @@ if (mysql_num_rows($DetailProduct) > 0) {
 
 									 <td align="center"><strong>'.@$gettypepro.'</strong></td>
 
-									 <td align="center"><strong>'.@$showDetailProduct->hand.'</strong></td>
+									 <td align="center"><strong>มือ '.@$showDetailProduct->hand.'</strong></td>
 
                   <td><strong>'.@$gettype.'</strong></td>
 
